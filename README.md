@@ -12,30 +12,31 @@ K-Means Clustering Paralelizado
     - make
 
 3. Pré-pricessamento
-   As colunas "Milk" e "Grocery" da base original foram extraídas com:
-        cut -d',' -f4,5 "Wholesale customers data.csv" > "wholesale_customers_data.csv"
 
-4. Compilação
-    Sequencial:
-        gcc -O3 -o kmeans_seq k_means_clustering.c -lm
+   - As colunas "Milk" e "Grocery" da base original foram extraídas com: 'cut -d',' -f4,5 "Wholesale customers data.csv" > "wholesale_customers_data.csv"'
+
+5. Compilação
+
+   - Sequencial:
+        'gcc -O3 -o kmeans_seq k_means_clustering.c -lm'
    
-    OpenMP:
-        gcc -O3 -fopenmp -o kmeans_omp k_means_clustering.c -lm
+    - OpenMP:
+        'gcc -O3 -fopenmp -o kmeans_omp k_means_clustering.c -lm'
    
-    CUDA:
-        nvcc -O3 -o kmeans_cuda k_means_cuda.cu
+    - CUDA:
+        'nvcc -O3 -o kmeans_cuda k_means_cuda.cu'
 
-5. Execução
-    ./kmeans_seq wholesale_customers_data.csv
-    ./kmeans_omp wholesale_customers_data.csv [num_threads]
-    ./kmeans_cuda wholesale_customers_data.csv
+7. Execução
+    - ./kmeans_seq wholesale_customers_data.csv
+    - ./kmeans_omp wholesale_customers_data.csv [num_threads]
+    - ./kmeans_cuda wholesale_customers_data.csv
 
-6. Alterações para paralelização
+8. Alterações para paralelização
     Comentários marcados com "OpenMP" e "CUDA” no código devem ser descomentados.
 
-7. Link do código sequencial base
+9. Link do código sequencial base
     https://github.com/TheAlgorithms/C/blob/master/machine_learning/k_means_clustering.c
 
-8. Autores
+10. Autores
     - Lakhan Nad (original)
     - Lucas Lopes (modificações OpenMP/CUDA)
