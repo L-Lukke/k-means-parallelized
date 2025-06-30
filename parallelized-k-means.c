@@ -12,9 +12,24 @@
  * the output method i.e. printEPS is only good for
  * polar data points i.e. in a circle and both test
  * use the same.
- * @author [Lakhan Nad](https://github.com/Lakhan-Nad), modified by [Lucas Lopes] (https://https://github.com/L-Lukke)
+ * @author [Lakhan Nad](https://github.com/Lakhan-Nad), modified by [Lucas Lopes](https://https://github.com/L-Lukke)
 */
 
+/*
+tempo de execução:
+    Sequencial:
+    14.3 s
+
+    OpenMP Multicore (CPU):
+        2 threads: 6.5 s
+        4 threads: 3.3 s
+        8 threads: 1.8 s
+        16 threads: 1.5 s
+        32 threads: 1.3 s
+    
+    CUDA:
+        0.8 s
+*/
 
 // CUDA
 // #include <cuda_runtime.h>
@@ -444,6 +459,35 @@ void printEPS(observation pts[], size_t len, cluster cent[], int k)
     free(colors);
 }
 
+void testRealData(const char* filename)
+{
+    FILE* file = fopen(filename, "r");
+    if (!file) {
+        perror("no file");
+        exit(EXIT_FAILURE);
+    }
+
+    size_t capacity = 1000000;
+    size_t size = 0;
+    observation* observations = malloc(sizeof(observation) * capacity);
+
+    while (fscanf(file, "%lf,%lf", &observations[size].x, &observations[size].y) == 2) {
+        size++;
+        if (size >= capacity) {
+            capacity *= 2;
+            observations = realloc(observations, sizeof(observation) * capacity);
+        }
+    }
+    fclose(file);
+
+    int k = 11;
+    cluster* clusters = kMeans(observations, size, k);
+    printEPS(observations, size, clusters, k);
+
+    free(observations);
+    free(clusters);
+}
+
 /*!
  * A function to test the kMeans function
  * Generates 100000 points in a circle of
@@ -524,7 +568,8 @@ void test2()
 int main()
 {
     srand(time(NULL));
-    test();
-    /* test2(); */
+    testRealData("wholesale_customers_data.csv");
+    // test();
+    // test2();
     return 0;
 }
